@@ -698,65 +698,224 @@ function loadDates() {
   dateSelect.innerHTML =
     '<option value="">Φόρτωση ημερομηνιών...</option>';
 
-
   submitBtn.disabled = true;
 
-
   const callbackName =
-    "dates_" + Date.now();
+    "datesCallback_" + Date.now();
 
+  let finished = false;
 
-  window[callbackName] =
-    function(data) {
+  function cleanup() {
 
-      console.log(
-        "ΗΜΕΡΟΜΗΝΙΕΣ:",
-        data
+    if (finished) return;
+
+    finished = true;
+
+    try {
+      delete window[callbackName];
+    } catch (e) {}
+
+    if (script && script.parentNode) {
+      script.parentNode.removeChild(script);
+    }
+  }
+
+  window[callbackName] = function(data) {
+
+    console.log("DATES:", data);
+
+    cleanup();
+
+    if (!Array.isArray(data)) {
+
+      dateSelect.innerHTML =
+        '<option value="">Σφάλμα δεδομένων</option>';
+
+      showMessage(
+        "Το σύστημα επέστρεψε μη έγκυρα δεδομένα.",
+        "error"
       );
 
+      return;
+    }
 
-      delete window[callbackName];
-
-
-      renderDates(data);
-
-    };
+    renderDates(data);
+  };
 
 
   const script =
     document.createElement("script");
 
 
+  script.type =
+    "text/javascript";
+
+
+  script.async =
+    true;
+
+
   script.src =
     SCRIPT_URL +
     "?action=getDates&callback=" +
-    callbackName;
+    encodeURIComponent(callbackName) +
+    "&_=" +
+    Date.now();
 
 
-  script.onerror =
-    function() {
+  script.onerror = function() {
 
-      delete window[callbackName];
+    cleanup();
 
+    dateSelect.innerHTML =
+      '<option value="">Αποτυχία φόρτωσης</option>';
+
+    showMessage(
+      "Αποτυχία φόρτωσης των ημερομηνιών. Ελέγξτε τη σύνδεσή σας.",
+      "error"
+    );
+
+  };
+
+
+  document.body.appendChild(script);
+
+
+  /*
+   * Αν για οποιονδήποτε λόγο
+   * δεν έρθει απάντηση σε 15 δευτερόλεπτα.
+   */
+
+  setTimeout(function() {
+
+    if (!finished) {
+
+      cleanup();
 
       dateSelect.innerHTML =
         '<option value="">Αποτυχία φόρτωσης</option>';
 
-
       showMessage(
-        "Σφάλμα κατά τη φόρτωση των ημερομηνιών.",
+        "Το σύστημα δεν απάντησε εγκαίρως.",
         "error"
       );
 
-    };
+    }
+
+  }, 15000);
+
+}function loadDates() {
+
+  dateSelect.innerHTML =
+    '<option value="">Φόρτωση ημερομηνιών...</option>';
+
+  submitBtn.disabled = true;
+
+  const callbackName =
+    "datesCallback_" + Date.now();
+
+  let finished = false;
+
+  function cleanup() {
+
+    if (finished) return;
+
+    finished = true;
+
+    try {
+      delete window[callbackName];
+    } catch (e) {}
+
+    if (script && script.parentNode) {
+      script.parentNode.removeChild(script);
+    }
+  }
+
+  window[callbackName] = function(data) {
+
+    console.log("DATES:", data);
+
+    cleanup();
+
+    if (!Array.isArray(data)) {
+
+      dateSelect.innerHTML =
+        '<option value="">Σφάλμα δεδομένων</option>';
+
+      showMessage(
+        "Το σύστημα επέστρεψε μη έγκυρα δεδομένα.",
+        "error"
+      );
+
+      return;
+    }
+
+    renderDates(data);
+  };
 
 
-  document.body.appendChild(
-    script
-  );
+  const script =
+    document.createElement("script");
+
+
+  script.type =
+    "text/javascript";
+
+
+  script.async =
+    true;
+
+
+  script.src =
+    SCRIPT_URL +
+    "?action=getDates&callback=" +
+    encodeURIComponent(callbackName) +
+    "&_=" +
+    Date.now();
+
+
+  script.onerror = function() {
+
+    cleanup();
+
+    dateSelect.innerHTML =
+      '<option value="">Αποτυχία φόρτωσης</option>';
+
+    showMessage(
+      "Αποτυχία φόρτωσης των ημερομηνιών. Ελέγξτε τη σύνδεσή σας.",
+      "error"
+    );
+
+  };
+
+
+  document.body.appendChild(script);
+
+
+  /*
+   * Αν για οποιονδήποτε λόγο
+   * δεν έρθει απάντηση σε 15 δευτερόλεπτα.
+   */
+
+  setTimeout(function() {
+
+    if (!finished) {
+
+      cleanup();
+
+      dateSelect.innerHTML =
+        '<option value="">Αποτυχία φόρτωσης</option>';
+
+      showMessage(
+        "Το σύστημα δεν απάντησε εγκαίρως.",
+        "error"
+      );
+
+    }
+
+  }, 15000);
 
 }
-
 
 
 /* =====================================================
