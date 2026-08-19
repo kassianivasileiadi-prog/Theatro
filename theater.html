@@ -700,223 +700,51 @@ function loadDates() {
 
   submitBtn.disabled = true;
 
-  const callbackName =
-    "datesCallback_" + Date.now();
+  fetch(
+    SCRIPT_URL + "?action=getDates"
+  )
 
-  let finished = false;
+    .then(function(response) {
 
-  function cleanup() {
+      if (!response.ok) {
+        throw new Error(
+          "HTTP error: " + response.status
+        );
+      }
 
-    if (finished) return;
+      return response.json();
 
-    finished = true;
+    })
 
-    try {
-      delete window[callbackName];
-    } catch (e) {}
+    .then(function(data) {
 
-    if (script && script.parentNode) {
-      script.parentNode.removeChild(script);
-    }
-  }
-
-  window[callbackName] = function(data) {
-
-    console.log("DATES:", data);
-
-    cleanup();
-
-    if (!Array.isArray(data)) {
-
-      dateSelect.innerHTML =
-        '<option value="">Σφάλμα δεδομένων</option>';
-
-      showMessage(
-        "Το σύστημα επέστρεψε μη έγκυρα δεδομένα.",
-        "error"
+      console.log(
+        "ΗΜΕΡΟΜΗΝΙΕΣ:",
+        data
       );
 
-      return;
-    }
+      renderDates(data);
 
-    renderDates(data);
-  };
+    })
 
+    .catch(function(error) {
 
-  const script =
-    document.createElement("script");
-
-
-  script.type =
-    "text/javascript";
-
-
-  script.async =
-    true;
-
-
-  script.src =
-    SCRIPT_URL +
-    "?action=getDates&callback=" +
-    encodeURIComponent(callbackName) +
-    "&_=" +
-    Date.now();
-
-
-  script.onerror = function() {
-
-    cleanup();
-
-    dateSelect.innerHTML =
-      '<option value="">Αποτυχία φόρτωσης</option>';
-
-    showMessage(
-      "Αποτυχία φόρτωσης των ημερομηνιών. Ελέγξτε τη σύνδεσή σας.",
-      "error"
-    );
-
-  };
-
-
-  document.body.appendChild(script);
-
-
-  /*
-   * Αν για οποιονδήποτε λόγο
-   * δεν έρθει απάντηση σε 15 δευτερόλεπτα.
-   */
-
-  setTimeout(function() {
-
-    if (!finished) {
-
-      cleanup();
+      console.error(
+        "Σφάλμα φόρτωσης ημερομηνιών:",
+        error
+      );
 
       dateSelect.innerHTML =
         '<option value="">Αποτυχία φόρτωσης</option>';
 
       showMessage(
-        "Το σύστημα δεν απάντησε εγκαίρως.",
+        "Σφάλμα κατά τη φόρτωση των ημερομηνιών.",
         "error"
       );
 
-    }
-
-  }, 15000);
-
-}function loadDates() {
-
-  dateSelect.innerHTML =
-    '<option value="">Φόρτωση ημερομηνιών...</option>';
-
-  submitBtn.disabled = true;
-
-  const callbackName =
-    "datesCallback_" + Date.now();
-
-  let finished = false;
-
-  function cleanup() {
-
-    if (finished) return;
-
-    finished = true;
-
-    try {
-      delete window[callbackName];
-    } catch (e) {}
-
-    if (script && script.parentNode) {
-      script.parentNode.removeChild(script);
-    }
-  }
-
-  window[callbackName] = function(data) {
-
-    console.log("DATES:", data);
-
-    cleanup();
-
-    if (!Array.isArray(data)) {
-
-      dateSelect.innerHTML =
-        '<option value="">Σφάλμα δεδομένων</option>';
-
-      showMessage(
-        "Το σύστημα επέστρεψε μη έγκυρα δεδομένα.",
-        "error"
-      );
-
-      return;
-    }
-
-    renderDates(data);
-  };
-
-
-  const script =
-    document.createElement("script");
-
-
-  script.type =
-    "text/javascript";
-
-
-  script.async =
-    true;
-
-
-  script.src =
-    SCRIPT_URL +
-    "?action=getDates&callback=" +
-    encodeURIComponent(callbackName) +
-    "&_=" +
-    Date.now();
-
-
-  script.onerror = function() {
-
-    cleanup();
-
-    dateSelect.innerHTML =
-      '<option value="">Αποτυχία φόρτωσης</option>';
-
-    showMessage(
-      "Αποτυχία φόρτωσης των ημερομηνιών. Ελέγξτε τη σύνδεσή σας.",
-      "error"
-    );
-
-  };
-
-
-  document.body.appendChild(script);
-
-
-  /*
-   * Αν για οποιονδήποτε λόγο
-   * δεν έρθει απάντηση σε 15 δευτερόλεπτα.
-   */
-
-  setTimeout(function() {
-
-    if (!finished) {
-
-      cleanup();
-
-      dateSelect.innerHTML =
-        '<option value="">Αποτυχία φόρτωσης</option>';
-
-      showMessage(
-        "Το σύστημα δεν απάντησε εγκαίρως.",
-        "error"
-      );
-
-    }
-
-  }, 15000);
+    });
 
 }
-
 
 /* =====================================================
    RENDER DATES
