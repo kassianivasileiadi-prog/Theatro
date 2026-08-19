@@ -76,21 +76,6 @@
     }
 
 
-    .school-name {
-
-      font-family: Arial, sans-serif;
-
-      font-size: 15px;
-
-      letter-spacing: 1px;
-
-      color: #333;
-
-      margin-top: 5px;
-
-    }
-
-
     .header-line {
 
       width: 70px;
@@ -416,13 +401,6 @@
       }
 
 
-      .school-name {
-
-        font-size: 14px;
-
-      }
-
-
       .card {
 
         padding: 27px 20px 25px 20px;
@@ -449,9 +427,7 @@
   <div class="page">
 
 
-    <!-- =========================
-         LOGO
-         ========================= -->
+    <!-- LOGO -->
 
     <div class="header">
 
@@ -466,9 +442,7 @@
     </div>
 
 
-    <!-- =========================
-         BOOKING CARD
-         ========================= -->
+    <!-- CARD -->
 
     <div class="card">
 
@@ -613,6 +587,7 @@ const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbwgG80B2DPh_69xviz2tB_x-mvVqJcq0B30ur-nh09Q_JdTl-AIQIzCt8dbhSvpdhTX/exec";
 
 
+
 /* =====================================================
    HTML ELEMENTS
    ===================================================== */
@@ -620,29 +595,24 @@ const SCRIPT_URL =
 const dateSelect =
   document.getElementById("dateSelect");
 
-
 const submitBtn =
   document.getElementById("submitBtn");
-
 
 const bookingForm =
   document.getElementById("bookingForm");
 
-
 const messageDiv =
   document.getElementById("message");
-
 
 const seatsInput =
   document.getElementById("seats");
 
-
 const nameInput =
   document.getElementById("name");
 
-
 const emailInput =
   document.getElementById("email");
+
 
 
 /* =====================================================
@@ -654,34 +624,29 @@ let availableSeatsByDate = {};
 let bookingInProgress = false;
 
 
+
 /* =====================================================
    MESSAGE
    ===================================================== */
 
 function showMessage(message, type) {
 
-  messageDiv.textContent =
-    message;
+  messageDiv.textContent = message;
 
-  messageDiv.className =
-    type;
+  messageDiv.className = type;
 
-  messageDiv.style.display =
-    "block";
+  messageDiv.style.display = "block";
 
 }
 
 
-/* =====================================================
-   HIDE MESSAGE
-   ===================================================== */
 
 function hideMessage() {
 
-  messageDiv.style.display =
-    "none";
+  messageDiv.style.display = "none";
 
 }
+
 
 
 /* =====================================================
@@ -702,93 +667,8 @@ function loadDates() {
     "dates_" + Date.now();
 
 
-  let script = null;
-
-  let finished = false;
-
-
-  /* =========================================
-     CLEANUP
-     ========================================= */
-
-  function cleanup() {
-
-    if (script && script.parentNode) {
-
-      script.parentNode.removeChild(
-        script
-      );
-
-    }
-
-    try {
-
-      delete window[callbackName];
-
-    } catch (error) {
-
-      window[callbackName] =
-        undefined;
-
-    }
-
-  }
-
-
-  /* =========================================
-     TIMEOUT
-     ========================================= */
-
-  const timeout =
-    setTimeout(
-      function() {
-
-        if (finished) {
-          return;
-        }
-
-        finished = true;
-
-        cleanup();
-
-
-        console.error(
-          "JSONP TIMEOUT"
-        );
-
-
-        dateSelect.innerHTML =
-          '<option value="">Αποτυχία φόρτωσης</option>';
-
-
-        showMessage(
-          "Δεν ήταν δυνατή η φόρτωση των ημερομηνιών.",
-          "error"
-        );
-
-      },
-      10000
-    );
-
-
-  /* =========================================
-     CALLBACK
-     ========================================= */
-
   window[callbackName] =
     function(data) {
-
-      if (finished) {
-        return;
-      }
-
-      finished = true;
-
-
-      clearTimeout(
-        timeout
-      );
-
 
       console.log(
         "ΗΜΕΡΟΜΗΝΙΕΣ:",
@@ -796,36 +676,39 @@ function loadDates() {
       );
 
 
-      cleanup();
+      try {
+
+        renderDates(data);
+
+      } catch (error) {
+
+        console.error(
+          "Σφάλμα renderDates:",
+          error
+        );
+
+        showMessage(
+          "Σφάλμα εμφάνισης των ημερομηνιών.",
+          "error"
+        );
+
+      }
 
 
-      renderDates(
-        data
-      );
+      delete window[callbackName];
 
     };
 
 
-  /* =========================================
-     SCRIPT
-     ========================================= */
-
-  script =
-    document.createElement(
-      "script"
-    );
-
-
-  script.async = true;
+  const script =
+    document.createElement("script");
 
 
   script.src =
     SCRIPT_URL +
     "?action=getDates" +
     "&callback=" +
-    encodeURIComponent(
-      callbackName
-    ) +
+    callbackName +
     "&t=" +
     Date.now();
 
@@ -833,24 +716,12 @@ function loadDates() {
   script.onerror =
     function() {
 
-      if (finished) {
-        return;
-      }
-
-      finished = true;
-
-
-      clearTimeout(
-        timeout
-      );
-
-
-      cleanup();
-
-
       console.error(
-        "JSONP SCRIPT ERROR"
+        "JSONP ERROR"
       );
+
+
+      delete window[callbackName];
 
 
       dateSelect.innerHTML =
@@ -858,18 +729,17 @@ function loadDates() {
 
 
       showMessage(
-        "Σφάλμα κατά τη φόρτωση των ημερομηνιών.",
+        "Δεν ήταν δυνατή η φόρτωση των ημερομηνιών.",
         "error"
       );
 
     };
 
 
-  document.body.appendChild(
-    script
-  );
+  document.body.appendChild(script);
 
 }
+
 
 
 /* =====================================================
@@ -878,18 +748,24 @@ function loadDates() {
 
 function renderDates(dates) {
 
+
+  console.log(
+    "RENDER DATES:",
+    dates
+  );
+
+
   dateSelect.innerHTML =
     '<option value="">-- Επιλέξτε ημερομηνία --</option>';
 
+
   availableSeatsByDate = {};
 
-  let hasAvailable =
-    false;
+
+  let hasAvailable = false;
 
 
-  if (
-    !Array.isArray(dates)
-  ) {
+  if (!Array.isArray(dates)) {
 
     showMessage(
       "Το σύστημα επέστρεψε μη έγκυρα δεδομένα.",
@@ -901,99 +777,88 @@ function renderDates(dates) {
   }
 
 
-  dates.forEach(
-    function(item) {
-
-      const date =
-        String(
-          item.dateName
-        ).trim();
+  dates.forEach(function(item) {
 
 
-      const available =
-        Number(
-          item.availableSeats
-        ) || 0;
+    const date =
+      String(
+        item.dateName
+      ).trim();
 
 
-      availableSeatsByDate[date] =
-        available;
+    const available =
+      Number(
+        item.availableSeats
+      ) || 0;
 
 
-      const option =
-        document.createElement(
-          "option"
-        );
+    availableSeatsByDate[date] =
+      available;
 
 
-      option.value =
-        date;
+    const option =
+      document.createElement("option");
 
 
-      const parts =
-        date.split("-");
+    option.value =
+      date;
 
 
-      let displayDate =
-        date;
+    const parts =
+      date.split("-");
 
 
-      if (
-        parts.length === 3
-      ) {
-
-        displayDate =
-          parts[2] +
-          "/" +
-          parts[1] +
-          "/" +
-          parts[0];
-
-      }
+    let displayDate =
+      date;
 
 
-      if (
-        available > 0
-      ) {
+    if (parts.length === 3) {
 
-        option.textContent =
-          displayDate +
-          " — " +
-          available +
-          " διαθέσιμες θέσεις";
-
-
-        hasAvailable =
-          true;
-
-      } else {
-
-        option.textContent =
-          displayDate +
-          " — ΕΞΑΝΤΛΗΘΗΚΕ";
-
-
-        option.disabled =
-          true;
-
-      }
-
-
-      dateSelect.appendChild(
-        option
-      );
+      displayDate =
+        parts[2] +
+        "/" +
+        parts[1] +
+        "/" +
+        parts[0];
 
     }
-  );
+
+
+    if (available > 0) {
+
+      option.textContent =
+        displayDate +
+        " — " +
+        available +
+        " διαθέσιμες θέσεις";
+
+
+      hasAvailable = true;
+
+    }
+
+    else {
+
+      option.textContent =
+        displayDate +
+        " — ΕΞΑΝΤΛΗΘΗΚΕ";
+
+
+      option.disabled = true;
+
+    }
+
+
+    dateSelect.appendChild(option);
+
+  });
 
 
   submitBtn.disabled =
     !hasAvailable;
 
 
-  if (
-    !hasAvailable
-  ) {
+  if (!hasAvailable) {
 
     showMessage(
       "Δεν υπάρχουν διαθέσιμες θέσεις.",
@@ -1005,6 +870,7 @@ function renderDates(dates) {
 }
 
 
+
 /* =====================================================
    DATE CHANGE
    ===================================================== */
@@ -1013,6 +879,7 @@ dateSelect.addEventListener(
   "change",
   function() {
 
+
     hideMessage();
 
 
@@ -1020,17 +887,11 @@ dateSelect.addEventListener(
       dateSelect.value;
 
 
-    if (
-      !selectedDate
-    ) {
+    if (!selectedDate) {
 
-      submitBtn.disabled =
-        true;
+      submitBtn.disabled = true;
 
-
-      seatsInput.max =
-        10;
-
+      seatsInput.max = 10;
 
       return;
 
@@ -1038,9 +899,7 @@ dateSelect.addEventListener(
 
 
     const available =
-      availableSeatsByDate[
-        selectedDate
-      ] || 0;
+      availableSeatsByDate[selectedDate] || 0;
 
 
     seatsInput.max =
@@ -1051,13 +910,10 @@ dateSelect.addEventListener(
 
 
     if (
-      Number(
-        seatsInput.value
-      ) > available
+      Number(seatsInput.value) > available
     ) {
 
-      seatsInput.value =
-        1;
+      seatsInput.value = 1;
 
     }
 
@@ -1069,6 +925,7 @@ dateSelect.addEventListener(
 );
 
 
+
 /* =====================================================
    SEATS CHECK
    ===================================================== */
@@ -1077,13 +934,12 @@ seatsInput.addEventListener(
   "input",
   function() {
 
+
     const selectedDate =
       dateSelect.value;
 
 
-    if (
-      !selectedDate
-    ) {
+    if (!selectedDate) {
 
       return;
 
@@ -1091,9 +947,7 @@ seatsInput.addEventListener(
 
 
     const available =
-      availableSeatsByDate[
-        selectedDate
-      ] || 0;
+      availableSeatsByDate[selectedDate] || 0;
 
 
     const requested =
@@ -1103,10 +957,7 @@ seatsInput.addEventListener(
       ) || 0;
 
 
-    if (
-      requested >
-      available
-    ) {
+    if (requested > available) {
 
       showMessage(
 
@@ -1118,7 +969,9 @@ seatsInput.addEventListener(
 
       );
 
-    } else {
+    }
+
+    else {
 
       hideMessage();
 
@@ -1126,6 +979,7 @@ seatsInput.addEventListener(
 
   }
 );
+
 
 
 /* =====================================================
@@ -1136,12 +990,11 @@ bookingForm.addEventListener(
   "submit",
   function(e) {
 
+
     e.preventDefault();
 
 
-    if (
-      bookingInProgress
-    ) {
+    if (bookingInProgress) {
 
       return;
 
@@ -1167,10 +1020,6 @@ bookingForm.addEventListener(
       );
 
 
-    /* -----------------------------------------------
-       BASIC CHECK
-       ----------------------------------------------- */
-
     if (
       !dateName ||
       !name ||
@@ -1189,19 +1038,11 @@ bookingForm.addEventListener(
     }
 
 
-    /* -----------------------------------------------
-       AVAILABLE SEATS
-       ----------------------------------------------- */
-
     const available =
-      availableSeatsByDate[
-        dateName
-      ] || 0;
+      availableSeatsByDate[dateName] || 0;
 
 
-    if (
-      seats > available
-    ) {
+    if (seats > available) {
 
       showMessage(
 
@@ -1222,27 +1063,19 @@ bookingForm.addEventListener(
     }
 
 
-    /* -----------------------------------------------
-       LOCK
-       ----------------------------------------------- */
+    bookingInProgress = true;
 
-    bookingInProgress =
-      true;
-
-
-    submitBtn.disabled =
-      true;
-
+    submitBtn.disabled = true;
 
     submitBtn.textContent =
       "ΑΠΟΣΤΟΛΗ ΚΡΑΤΗΣΗΣ...";
 
-
     hideMessage();
 
 
+
     /* =================================================
-       JSONP CALLBACK
+       BOOKING JSONP
        ================================================= */
 
     const callbackName =
@@ -1251,6 +1084,7 @@ bookingForm.addEventListener(
 
     window[callbackName] =
       function(result) {
+
 
         console.log(
           "ΑΠΑΝΤΗΣΗ ΚΡΑΤΗΣΗΣ:",
@@ -1265,10 +1099,6 @@ bookingForm.addEventListener(
           false;
 
 
-        /* -------------------------------------------
-           SUCCESS
-           ------------------------------------------- */
-
         if (
           result &&
           result.success === true
@@ -1276,8 +1106,7 @@ bookingForm.addEventListener(
 
 
           showMessage(
-            "✓ " +
-            result.message,
+            "✓ " + result.message,
             "success"
           );
 
@@ -1285,17 +1114,12 @@ bookingForm.addEventListener(
           bookingForm.reset();
 
 
-          seatsInput.value =
-            1;
+          seatsInput.value = 1;
+
+          seatsInput.max = 10;
 
 
-          seatsInput.max =
-            10;
-
-
-          submitBtn.disabled =
-            true;
-
+          submitBtn.disabled = true;
 
           submitBtn.textContent =
             "ΥΠΟΒΟΛΗ ΚΡΑΤΗΣΗΣ";
@@ -1310,12 +1134,8 @@ bookingForm.addEventListener(
             800
           );
 
+
         }
-
-
-        /* -------------------------------------------
-           ERROR
-           ------------------------------------------- */
 
         else {
 
@@ -1346,39 +1166,26 @@ bookingForm.addEventListener(
       };
 
 
+
     /* =================================================
        BOOKING URL
        ================================================= */
 
     const url =
       SCRIPT_URL +
-
       "?action=book" +
-
       "&callback=" +
-      encodeURIComponent(
-        callbackName
-      ) +
-
+      encodeURIComponent(callbackName) +
       "&dateName=" +
-      encodeURIComponent(
-        dateName
-      ) +
-
+      encodeURIComponent(dateName) +
       "&name=" +
-      encodeURIComponent(
-        name
-      ) +
-
+      encodeURIComponent(name) +
       "&email=" +
-      encodeURIComponent(
-        email
-      ) +
-
+      encodeURIComponent(email) +
       "&seats=" +
-      encodeURIComponent(
-        seats
-      );
+      encodeURIComponent(seats) +
+      "&t=" +
+      Date.now();
 
 
     console.log(
@@ -1387,14 +1194,9 @@ bookingForm.addEventListener(
     );
 
 
-    /* =================================================
-       CREATE SCRIPT
-       ================================================= */
 
     const script =
-      document.createElement(
-        "script"
-      );
+      document.createElement("script");
 
 
     script.src =
@@ -1431,12 +1233,11 @@ bookingForm.addEventListener(
       };
 
 
-    document.body.appendChild(
-      script
-    );
+    document.body.appendChild(script);
 
   }
 );
+
 
 
 /* =====================================================
