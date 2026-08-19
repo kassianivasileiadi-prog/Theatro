@@ -700,49 +700,177 @@ function loadDates() {
 
   submitBtn.disabled = true;
 
-  fetch(
-    SCRIPT_URL + "?action=getDates"
-  )
+  hideMessage();
 
-    .then(function(response) {
 
-      if (!response.ok) {
-        throw new Error(
-          "HTTP error: " + response.status
+  const callbackName =
+    "dates_" + Date.now();
+
+
+  let script = null;
+
+  let finished = false;
+
+
+  /* =========================================
+     CLEANUP
+     ========================================= */
+
+  function cleanup() {
+
+    if (script && script.parentNode) {
+
+      script.parentNode.removeChild(
+        script
+      );
+
+    }
+
+    try {
+
+      delete window[callbackName];
+
+    } catch (error) {
+
+      window[callbackName] =
+        undefined;
+
+    }
+
+  }
+
+
+  /* =========================================
+     TIMEOUT
+     ========================================= */
+
+  const timeout =
+    setTimeout(
+      function() {
+
+        if (finished) {
+          return;
+        }
+
+        finished = true;
+
+        cleanup();
+
+
+        console.error(
+          "JSONP TIMEOUT"
         );
+
+
+        dateSelect.innerHTML =
+          '<option value="">Αποτυχία φόρτωσης</option>';
+
+
+        showMessage(
+          "Δεν ήταν δυνατή η φόρτωση των ημερομηνιών.",
+          "error"
+        );
+
+      },
+      10000
+    );
+
+
+  /* =========================================
+     CALLBACK
+     ========================================= */
+
+  window[callbackName] =
+    function(data) {
+
+      if (finished) {
+        return;
       }
 
-      return response.json();
+      finished = true;
 
-    })
 
-    .then(function(data) {
+      clearTimeout(
+        timeout
+      );
+
 
       console.log(
         "ΗΜΕΡΟΜΗΝΙΕΣ:",
         data
       );
 
-      renderDates(data);
 
-    })
+      cleanup();
 
-    .catch(function(error) {
+
+      renderDates(
+        data
+      );
+
+    };
+
+
+  /* =========================================
+     SCRIPT
+     ========================================= */
+
+  script =
+    document.createElement(
+      "script"
+    );
+
+
+  script.async = true;
+
+
+  script.src =
+    SCRIPT_URL +
+    "?action=getDates" +
+    "&callback=" +
+    encodeURIComponent(
+      callbackName
+    );
+
+
+  script.onerror =
+    function() {
+
+      if (finished) {
+        return;
+      }
+
+      finished = true;
+
+
+      clearTimeout(
+        timeout
+      );
+
+
+      cleanup();
+
 
       console.error(
-        "Σφάλμα φόρτωσης ημερομηνιών:",
-        error
+        "JSONP SCRIPT ERROR"
       );
+
 
       dateSelect.innerHTML =
         '<option value="">Αποτυχία φόρτωσης</option>';
+
 
       showMessage(
         "Σφάλμα κατά τη φόρτωση των ημερομηνιών.",
         "error"
       );
 
-    });
+    };
+
+
+  document.body.appendChild(
+    script
+  );
 
 }
 
