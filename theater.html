@@ -613,7 +613,6 @@ const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbwgG80B2DPh_69xviz2tB_x-mvVqJcq0B30ur-nh09Q_JdTl-AIQIzCt8dbhSvpdhTX/exec";
 
 
-
 /* =====================================================
    HTML ELEMENTS
    ===================================================== */
@@ -646,7 +645,6 @@ const emailInput =
   document.getElementById("email");
 
 
-
 /* =====================================================
    VARIABLES
    ===================================================== */
@@ -654,7 +652,6 @@ const emailInput =
 let availableSeatsByDate = {};
 
 let bookingInProgress = false;
-
 
 
 /* =====================================================
@@ -675,7 +672,6 @@ function showMessage(message, type) {
 }
 
 
-
 /* =====================================================
    HIDE MESSAGE
    ===================================================== */
@@ -686,7 +682,6 @@ function hideMessage() {
     "none";
 
 }
-
 
 
 /* =====================================================
@@ -830,7 +825,9 @@ function loadDates() {
     "&callback=" +
     encodeURIComponent(
       callbackName
-    );
+    ) +
+    "&t=" +
+    Date.now();
 
 
   script.onerror =
@@ -874,19 +871,17 @@ function loadDates() {
 
 }
 
+
 /* =====================================================
    RENDER DATES
    ===================================================== */
 
 function renderDates(dates) {
 
-
   dateSelect.innerHTML =
     '<option value="">-- Επιλέξτε ημερομηνία --</option>';
 
-
   availableSeatsByDate = {};
-
 
   let hasAvailable =
     false;
@@ -908,7 +903,6 @@ function renderDates(dates) {
 
   dates.forEach(
     function(item) {
-
 
       const date =
         String(
@@ -935,13 +929,6 @@ function renderDates(dates) {
       option.value =
         date;
 
-
-      /*
-       * Εμφάνιση:
-       * 2026-09-21
-       * →
-       * 21/09/2026
-       */
 
       const parts =
         date.split("-");
@@ -1018,7 +1005,6 @@ function renderDates(dates) {
 }
 
 
-
 /* =====================================================
    DATE CHANGE
    ===================================================== */
@@ -1026,7 +1012,6 @@ function renderDates(dates) {
 dateSelect.addEventListener(
   "change",
   function() {
-
 
     hideMessage();
 
@@ -1084,7 +1069,6 @@ dateSelect.addEventListener(
 );
 
 
-
 /* =====================================================
    SEATS CHECK
    ===================================================== */
@@ -1092,7 +1076,6 @@ dateSelect.addEventListener(
 seatsInput.addEventListener(
   "input",
   function() {
-
 
     const selectedDate =
       dateSelect.value;
@@ -1145,7 +1128,6 @@ seatsInput.addEventListener(
 );
 
 
-
 /* =====================================================
    SUBMIT
    ===================================================== */
@@ -1153,7 +1135,6 @@ seatsInput.addEventListener(
 bookingForm.addEventListener(
   "submit",
   function(e) {
-
 
     e.preventDefault();
 
@@ -1260,7 +1241,6 @@ bookingForm.addEventListener(
     hideMessage();
 
 
-
     /* =================================================
        JSONP CALLBACK
        ================================================= */
@@ -1271,7 +1251,6 @@ bookingForm.addEventListener(
 
     window[callbackName] =
       function(result) {
-
 
         console.log(
           "ΑΠΑΝΤΗΣΗ ΚΡΑΤΗΣΗΣ:",
@@ -1322,11 +1301,6 @@ bookingForm.addEventListener(
             "ΥΠΟΒΟΛΗ ΚΡΑΤΗΣΗΣ";
 
 
-          /*
-           * Ξαναφορτώνουμε τις
-           * διαθέσιμες θέσεις.
-           */
-
           setTimeout(
             function() {
 
@@ -1335,7 +1309,6 @@ bookingForm.addEventListener(
             },
             800
           );
-
 
         }
 
@@ -1373,7 +1346,6 @@ bookingForm.addEventListener(
       };
 
 
-
     /* =================================================
        BOOKING URL
        ================================================= */
@@ -1409,12 +1381,10 @@ bookingForm.addEventListener(
       );
 
 
-
     console.log(
       "BOOKING URL:",
       url
     );
-
 
 
     /* =================================================
@@ -1467,7 +1437,6 @@ bookingForm.addEventListener(
 
   }
 );
-
 
 
 /* =====================================================
