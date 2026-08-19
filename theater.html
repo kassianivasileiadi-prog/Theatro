@@ -3,593 +3,342 @@
 
 <head>
 
-  <meta charset="UTF-8">
-
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
-  <title>Κράτηση Θέσεων</title>
-
-
-  <style>
-
-    * {
-      box-sizing: border-box;
-    }
-
-
-    body {
-
-      margin: 0;
-
-      min-height: 100vh;
-
-      font-family: Georgia, "Times New Roman", serif;
-
-      background: #ffffff;
-
-      color: #222;
-
-      padding: 35px 15px;
-
-    }
-
-
-    .page {
-
-      width: 100%;
-
-      max-width: 560px;
-
-      margin: 0 auto;
-
-    }
-
-
-    /* =========================
-       LOGO
-       ========================= */
-
-    .header {
-
-      text-align: center;
-
-      margin-bottom: 25px;
-
-    }
-
-
-    .logo {
-
-      display: block;
-
-      width: auto;
-
-      max-width: 330px;
-
-      max-height: 170px;
-
-      margin: 0 auto 12px auto;
-
-      object-fit: contain;
-
-    }
-
-
-    .header-line {
-
-      width: 70px;
-
-      height: 2px;
-
-      background: #555;
-
-      margin: 17px auto 0 auto;
-
-    }
-
-
-    /* =========================
-       CARD
-       ========================= */
-
-    .card {
-
-      background: #f2f2f0;
-
-      border: 1px solid #dededb;
-
-      border-radius: 5px;
-
-      padding: 35px;
-
-      box-shadow:
-        0 10px 30px rgba(0,0,0,0.08);
-
-    }
-
-
-    /* =========================
-       TITLE
-       ========================= */
-
-    h1 {
-
-      text-align: center;
-
-      font-size: 28px;
-
-      font-weight: normal;
-
-      margin: 0 0 8px 0;
-
-      color: #222;
-
-    }
-
-
-    .subtitle {
-
-      text-align: center;
-
-      font-family: Arial, sans-serif;
-
-      font-size: 13px;
-
-      color: #777;
-
-      margin-bottom: 30px;
-
-    }
-
-
-    /* =========================
-       FORM
-       ========================= */
-
-    .form-group {
-
-      margin-bottom: 21px;
-
-    }
-
-
-    label {
-
-      display: block;
-
-      font-family: Arial, sans-serif;
-
-      font-size: 12px;
-
-      font-weight: bold;
-
-      letter-spacing: 0.7px;
-
-      text-transform: uppercase;
-
-      color: #444;
-
-      margin-bottom: 8px;
-
-    }
-
-
-    input,
-    select {
-
-      width: 100%;
-
-      height: 48px;
-
-      padding: 0 14px;
-
-      border: 1px solid #cfcfcb;
-
-      border-radius: 3px;
-
-      background: #ffffff;
-
-      color: #222;
-
-      font-family: Arial, sans-serif;
-
-      font-size: 14px;
-
-      outline: none;
-
-      transition: 0.2s;
-
-    }
-
-
-    input:hover,
-    select:hover {
-
-      border-color: #999;
-
-    }
-
-
-    input:focus,
-    select:focus {
-
-      background: #fff;
-
-      border-color: #555;
-
-      box-shadow:
-        0 0 0 2px rgba(0,0,0,0.05);
-
-    }
-
-
-    input::placeholder {
-
-      color: #aaa;
-
-    }
-
-
-    .availability-note {
-
-      font-family: Arial, sans-serif;
-
-      font-size: 12px;
-
-      color: #888;
-
-      margin-top: 7px;
-
-    }
-
-
-    /* =========================
-       BUTTON
-       ========================= */
-
-    button {
-
-      width: 100%;
-
-      height: 52px;
-
-      margin-top: 5px;
-
-      border: 1px solid #222;
-
-      border-radius: 3px;
-
-      background: #222;
-
-      color: white;
-
-      font-family: Arial, sans-serif;
-
-      font-size: 14px;
-
-      font-weight: bold;
-
-      letter-spacing: 0.8px;
-
-      cursor: pointer;
-
-      transition: 0.2s;
-
-    }
-
-
-    button:hover:not(:disabled) {
-
-      background: #444;
-
-      box-shadow:
-        0 5px 15px rgba(0,0,0,0.15);
-
-      transform: translateY(-1px);
-
-    }
-
-
-    button:active:not(:disabled) {
-
-      transform: translateY(0);
-
-    }
-
-
-    button:disabled {
-
-      background: #b8b8b5;
-
-      border-color: #b8b8b5;
-
-      cursor: not-allowed;
-
-      box-shadow: none;
-
-    }
-
-
-    /* =========================
-       MESSAGES
-       ========================= */
-
-    #message {
-
-      margin-top: 20px;
-
-      padding: 15px;
-
-      display: none;
-
-      text-align: center;
-
-      border-radius: 3px;
-
-      font-family: Arial, sans-serif;
-
-      font-size: 13px;
-
-      line-height: 1.5;
-
-    }
-
-
-    .success {
-
-      background: #f0f5f0;
-
-      color: #315b35;
-
-      border: 1px solid #c9d8c9;
-
-    }
-
-
-    .error {
-
-      background: #f8eeee;
-
-      color: #7b3030;
-
-      border: 1px solid #e2c4c4;
-
-    }
-
-
-    /* =========================
-       FOOTER
-       ========================= */
-
-    .footer {
-
-      text-align: center;
-
-      font-family: Arial, sans-serif;
-
-      font-size: 11px;
-
-      color: #888;
-
-      margin-top: 18px;
-
-      letter-spacing: 0.3px;
-
-    }
-
-
-    /* =========================
-       MOBILE
-       ========================= */
-
-    @media (max-width: 600px) {
-
-      body {
-
-        padding: 20px 12px;
-
-      }
-
-
-      .logo {
-
-        max-width: 280px;
-
-        max-height: 140px;
-
-      }
-
-
-      .card {
-
-        padding: 27px 20px 25px 20px;
-
-      }
-
-
-      h1 {
-
-        font-size: 24px;
-
-      }
-
-    }
-
-  </style>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Κράτηση Θέσεων</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Georgia, "Times New Roman", serif;
+  background: #ffffff;
+  color: #222;
+  padding: 35px 15px;
+}
+
+.page {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.logo {
+  display: block;
+  width: auto;
+  max-width: 330px;
+  max-height: 170px;
+  margin: 0 auto 12px auto;
+  object-fit: contain;
+}
+
+.header-line {
+  width: 70px;
+  height: 2px;
+  background: #555;
+  margin: 17px auto 0 auto;
+}
+
+.card {
+  background: #f2f2f0;
+  border: 1px solid #dededb;
+  border-radius: 5px;
+  padding: 35px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+h1 {
+  text-align: center;
+  font-size: 28px;
+  font-weight: normal;
+  margin: 0 0 8px 0;
+  color: #222;
+}
+
+.subtitle {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  color: #777;
+  margin-bottom: 30px;
+}
+
+.form-group {
+  margin-bottom: 21px;
+}
+
+label {
+  display: block;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  color: #444;
+  margin-bottom: 8px;
+}
+
+input,
+select {
+  width: 100%;
+  height: 48px;
+  padding: 0 14px;
+  border: 1px solid #cfcfcb;
+  border-radius: 3px;
+  background: #ffffff;
+  color: #222;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  outline: none;
+}
+
+input:hover,
+select:hover {
+  border-color: #999;
+}
+
+input:focus,
+select:focus {
+  border-color: #555;
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.05);
+}
+
+input::placeholder {
+  color: #aaa;
+}
+
+.availability-note {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  color: #888;
+  margin-top: 7px;
+}
+
+button {
+  width: 100%;
+  height: 52px;
+  margin-top: 5px;
+  border: 1px solid #222;
+  border-radius: 3px;
+  background: #222;
+  color: white;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background: #b8b8b5;
+  border-color: #b8b8b5;
+  cursor: not-allowed;
+}
+
+#message {
+  margin-top: 20px;
+  padding: 15px;
+  display: none;
+  text-align: center;
+  border-radius: 3px;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.success {
+  background: #f0f5f0;
+  color: #315b35;
+  border: 1px solid #c9d8c9;
+}
+
+.error {
+  background: #f8eeee;
+  color: #7b3030;
+  border: 1px solid #e2c4c4;
+}
+
+.footer {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  color: #888;
+  margin-top: 18px;
+  letter-spacing: 0.3px;
+}
+
+@media (max-width: 600px) {
+
+  body {
+    padding: 20px 12px;
+  }
+
+  .logo {
+    max-width: 280px;
+    max-height: 140px;
+  }
+
+  .card {
+    padding: 27px 20px 25px 20px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+}
+
+</style>
 
 </head>
 
-
 <body>
 
+<div class="page">
 
-  <div class="page">
+  <div class="header">
 
+    <img
+      class="logo"
+      src="logo.png"
+      alt="1ο Πρότυπο Λύκειο Καστοριάς"
+    >
 
-    <!-- LOGO -->
-
-    <div class="header">
-
-      <img
-        class="logo"
-        src="logo.png"
-        alt="1ο Πρότυπο Λύκειο Καστοριάς"
-      >
-
-      <div class="header-line"></div>
-
-    </div>
-
-
-    <!-- CARD -->
-
-    <div class="card">
-
-
-      <h1>
-        Κράτηση Θέσεων
-      </h1>
-
-
-      <div class="subtitle">
-        Παρακαλούμε συμπληρώστε τα στοιχεία σας
-      </div>
-
-
-      <form id="bookingForm">
-
-
-        <!-- ΗΜΕΡΟΜΗΝΙΑ -->
-
-        <div class="form-group">
-
-          <label for="dateSelect">
-            Ημερομηνία Παράστασης
-          </label>
-
-
-          <select
-            id="dateSelect"
-            required
-          >
-
-            <option value="">
-              Φόρτωση ημερομηνιών...
-            </option>
-
-          </select>
-
-
-          <div class="availability-note">
-            Επιλέξτε την ημερομηνία που επιθυμείτε.
-          </div>
-
-        </div>
-
-
-        <!-- ΟΝΟΜΑ -->
-
-        <div class="form-group">
-
-          <label for="name">
-            Ονοματεπώνυμο
-          </label>
-
-
-          <input
-            type="text"
-            id="name"
-            required
-            placeholder="π.χ. Μαρία Παπαδοπούλου"
-          >
-
-        </div>
-
-
-        <!-- EMAIL -->
-
-        <div class="form-group">
-
-          <label for="email">
-            Email
-          </label>
-
-
-          <input
-            type="email"
-            id="email"
-            required
-            placeholder="π.χ. example@gmail.com"
-          >
-
-        </div>
-
-
-        <!-- ΘΕΣΕΙΣ -->
-
-        <div class="form-group">
-
-          <label for="seats">
-            Αριθμός Θέσεων
-          </label>
-
-
-          <input
-            type="number"
-            id="seats"
-            min="1"
-            max="10"
-            value="1"
-            required
-          >
-
-        </div>
-
-
-        <!-- BUTTON -->
-
-        <button
-          type="submit"
-          id="submitBtn"
-          disabled
-        >
-          ΥΠΟΒΟΛΗ ΚΡΑΤΗΣΗΣ
-        </button>
-
-
-      </form>
-
-
-      <div id="message"></div>
-
-
-    </div>
-
-
-    <div class="footer">
-      Θεατρική Παράσταση • 1ο Πρότυπο Λύκειο Καστοριάς
-    </div>
-
+    <div class="header-line"></div>
 
   </div>
 
 
+  <div class="card">
+
+    <h1>Κράτηση Θέσεων</h1>
+
+    <div class="subtitle">
+      Παρακαλούμε συμπληρώστε τα στοιχεία σας
+    </div>
+
+
+    <form id="bookingForm">
+
+      <div class="form-group">
+
+        <label for="dateSelect">
+          Ημερομηνία Παράστασης
+        </label>
+
+        <select id="dateSelect" required>
+
+          <option value="">
+            Φόρτωση ημερομηνιών...
+          </option>
+
+        </select>
+
+        <div class="availability-note">
+          Επιλέξτε την ημερομηνία που επιθυμείτε.
+        </div>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="name">
+          Ονοματεπώνυμο
+        </label>
+
+        <input
+          type="text"
+          id="name"
+          required
+          placeholder="π.χ. Μαρία Παπαδοπούλου"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="email">
+          Email
+        </label>
+
+        <input
+          type="email"
+          id="email"
+          required
+          placeholder="π.χ. example@gmail.com"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="seats">
+          Αριθμός Θέσεων
+        </label>
+
+        <input
+          type="number"
+          id="seats"
+          min="1"
+          max="10"
+          value="1"
+          required
+        >
+
+      </div>
+
+
+      <button
+        type="submit"
+        id="submitBtn"
+        disabled
+      >
+        ΥΠΟΒΟΛΗ ΚΡΑΤΗΣΗΣ
+      </button>
+
+    </form>
+
+
+    <div id="message"></div>
+
+  </div>
+
+
+  <div class="footer">
+    Θεατρική Παράσταση • 1ο Πρότυπο Λύκειο Καστοριάς
+  </div>
+
+</div>
+
 
 <script>
 
-
 /* =====================================================
-   GOOGLE APPS SCRIPT URL
+   APPS SCRIPT
    ===================================================== */
 
 const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbwgG80B2DPh_69xviz2tB_x-mvVqJcq0B30ur-nh09Q_JdTl-AIQIzCt8dbhSvpdhTX/exec";
 
 
-
 /* =====================================================
-   HTML ELEMENTS
+   ELEMENTS
    ===================================================== */
 
 const dateSelect =
@@ -614,15 +363,9 @@ const emailInput =
   document.getElementById("email");
 
 
-
-/* =====================================================
-   VARIABLES
-   ===================================================== */
-
 let availableSeatsByDate = {};
 
 let bookingInProgress = false;
-
 
 
 /* =====================================================
@@ -640,13 +383,11 @@ function showMessage(message, type) {
 }
 
 
-
 function hideMessage() {
 
   messageDiv.style.display = "none";
 
 }
-
 
 
 /* =====================================================
@@ -660,47 +401,64 @@ function loadDates() {
 
   submitBtn.disabled = true;
 
+  hideMessage();
+
+
   const callbackName =
-    "testCallback";
+    "dates_" + Date.now();
+
 
   window[callbackName] = function(data) {
 
-    console.log(data);
+    console.log("DATES:", data);
+
+    delete window[callbackName];
 
     renderDates(data);
 
   };
 
+
   const script =
     document.createElement("script");
+
 
   script.src =
     SCRIPT_URL +
     "?action=getDates&callback=" +
     callbackName;
 
+
+  script.onerror = function() {
+
+    delete window[callbackName];
+
+    dateSelect.innerHTML =
+      '<option value="">Αποτυχία φόρτωσης</option>';
+
+    showMessage(
+      "Δεν ήταν δυνατή η φόρτωση των ημερομηνιών.",
+      "error"
+    );
+
+  };
+
+
   document.body.appendChild(script);
 
 }
+
+
 /* =====================================================
    RENDER DATES
    ===================================================== */
 
 function renderDates(dates) {
 
-
-  console.log(
-    "RENDER DATES:",
-    dates
-  );
-
-
   dateSelect.innerHTML =
     '<option value="">-- Επιλέξτε ημερομηνία --</option>';
 
-
   availableSeatsByDate = {};
-
 
   let hasAvailable = false;
 
@@ -719,17 +477,11 @@ function renderDates(dates) {
 
   dates.forEach(function(item) {
 
-
     const date =
-      String(
-        item.dateName
-      ).trim();
-
+      String(item.dateName).trim();
 
     const available =
-      Number(
-        item.availableSeats
-      ) || 0;
+      Number(item.availableSeats) || 0;
 
 
     availableSeatsByDate[date] =
@@ -740,16 +492,14 @@ function renderDates(dates) {
       document.createElement("option");
 
 
-    option.value =
-      date;
+    option.value = date;
 
 
     const parts =
       date.split("-");
 
 
-    let displayDate =
-      date;
+    let displayDate = date;
 
 
     if (parts.length === 3) {
@@ -772,17 +522,13 @@ function renderDates(dates) {
         available +
         " διαθέσιμες θέσεις";
 
-
       hasAvailable = true;
 
-    }
-
-    else {
+    } else {
 
       option.textContent =
         displayDate +
         " — ΕΞΑΝΤΛΗΘΗΚΕ";
-
 
       option.disabled = true;
 
@@ -797,18 +543,7 @@ function renderDates(dates) {
   submitBtn.disabled =
     !hasAvailable;
 
-
-  if (!hasAvailable) {
-
-    showMessage(
-      "Δεν υπάρχουν διαθέσιμες θέσεις.",
-      "error"
-    );
-
-  }
-
 }
-
 
 
 /* =====================================================
@@ -818,7 +553,6 @@ function renderDates(dates) {
 dateSelect.addEventListener(
   "change",
   function() {
-
 
     hideMessage();
 
@@ -843,15 +577,10 @@ dateSelect.addEventListener(
 
 
     seatsInput.max =
-      Math.min(
-        available,
-        10
-      );
+      Math.min(available, 10);
 
 
-    if (
-      Number(seatsInput.value) > available
-    ) {
+    if (Number(seatsInput.value) > available) {
 
       seatsInput.value = 1;
 
@@ -865,25 +594,19 @@ dateSelect.addEventListener(
 );
 
 
-
 /* =====================================================
-   SEATS CHECK
+   SEATS
    ===================================================== */
 
 seatsInput.addEventListener(
   "input",
   function() {
 
-
     const selectedDate =
       dateSelect.value;
 
 
-    if (!selectedDate) {
-
-      return;
-
-    }
+    if (!selectedDate) return;
 
 
     const available =
@@ -891,27 +614,19 @@ seatsInput.addEventListener(
 
 
     const requested =
-      parseInt(
-        seatsInput.value,
-        10
-      ) || 0;
+      parseInt(seatsInput.value, 10) || 0;
 
 
     if (requested > available) {
 
       showMessage(
-
         "Δεν υπάρχουν αρκετές διαθέσιμες θέσεις. Απομένουν μόνο " +
         available +
         " θέσεις.",
-
         "error"
-
       );
 
-    }
-
-    else {
+    } else {
 
       hideMessage();
 
@@ -921,43 +636,31 @@ seatsInput.addEventListener(
 );
 
 
-
 /* =====================================================
-   SUBMIT
+   BOOKING
    ===================================================== */
 
 bookingForm.addEventListener(
   "submit",
   function(e) {
 
-
     e.preventDefault();
 
 
-    if (bookingInProgress) {
-
-      return;
-
-    }
+    if (bookingInProgress) return;
 
 
     const dateName =
       dateSelect.value.trim();
 
-
     const name =
       nameInput.value.trim();
-
 
     const email =
       emailInput.value.trim();
 
-
     const seats =
-      parseInt(
-        seatsInput.value,
-        10
-      );
+      parseInt(seatsInput.value, 10);
 
 
     if (
@@ -985,17 +688,10 @@ bookingForm.addEventListener(
     if (seats > available) {
 
       showMessage(
-
-        available > 0
-
-          ? "Δεν υπάρχουν αρκετές διαθέσιμες θέσεις. Απομένουν μόνο " +
-            available +
-            " θέσεις."
-
-          : "Η παράσταση για αυτή την ημερομηνία έχει εξαντληθεί.",
-
+        "Δεν υπάρχουν αρκετές διαθέσιμες θέσεις. Απομένουν μόνο " +
+        available +
+        " θέσεις.",
         "error"
-
       );
 
       return;
@@ -1013,11 +709,6 @@ bookingForm.addEventListener(
     hideMessage();
 
 
-
-    /* =================================================
-       BOOKING JSONP
-       ================================================= */
-
     const callbackName =
       "booking_" + Date.now();
 
@@ -1025,25 +716,21 @@ bookingForm.addEventListener(
     window[callbackName] =
       function(result) {
 
-
         console.log(
-          "ΑΠΑΝΤΗΣΗ ΚΡΑΤΗΣΗΣ:",
+          "BOOKING:",
           result
         );
 
 
         delete window[callbackName];
 
-
-        bookingInProgress =
-          false;
+        bookingInProgress = false;
 
 
         if (
           result &&
           result.success === true
         ) {
-
 
           showMessage(
             "✓ " + result.message,
@@ -1053,11 +740,9 @@ bookingForm.addEventListener(
 
           bookingForm.reset();
 
-
           seatsInput.value = 1;
 
           seatsInput.max = 10;
-
 
           submitBtn.disabled = true;
 
@@ -1066,50 +751,30 @@ bookingForm.addEventListener(
 
 
           setTimeout(
-            function() {
-
-              loadDates();
-
-            },
+            loadDates,
             800
           );
 
 
-        }
+        } else {
 
-        else {
-
-
-          submitBtn.disabled =
-            false;
-
+          submitBtn.disabled = false;
 
           submitBtn.textContent =
             "ΥΠΟΒΟΛΗ ΚΡΑΤΗΣΗΣ";
 
 
           showMessage(
-
-            result &&
-            result.message
-
+            result && result.message
               ? result.message
-
               : "Η κράτηση δεν ολοκληρώθηκε.",
-
             "error"
-
           );
 
         }
 
       };
 
-
-
-    /* =================================================
-       BOOKING URL
-       ================================================= */
 
     const url =
       SCRIPT_URL +
@@ -1123,51 +788,32 @@ bookingForm.addEventListener(
       "&email=" +
       encodeURIComponent(email) +
       "&seats=" +
-      encodeURIComponent(seats) +
-      "&t=" +
-      Date.now();
-
-
-    console.log(
-      "BOOKING URL:",
-      url
-    );
-
+      encodeURIComponent(seats);
 
 
     const script =
       document.createElement("script");
 
 
-    script.src =
-      url;
+    script.src = url;
 
 
     script.onerror =
       function() {
 
-
         delete window[callbackName];
 
+        bookingInProgress = false;
 
-        bookingInProgress =
-          false;
-
-
-        submitBtn.disabled =
-          false;
-
+        submitBtn.disabled = false;
 
         submitBtn.textContent =
           "ΥΠΟΒΟΛΗ ΚΡΑΤΗΣΗΣ";
 
 
         showMessage(
-
           "Δεν ήταν δυνατή η επικοινωνία με το σύστημα.",
-
           "error"
-
         );
 
       };
@@ -1179,16 +825,13 @@ bookingForm.addEventListener(
 );
 
 
-
 /* =====================================================
    START
    ===================================================== */
 
 loadDates();
 
-
 </script>
-
 
 </body>
 
