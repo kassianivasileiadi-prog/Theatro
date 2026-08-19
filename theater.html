@@ -660,88 +660,28 @@ function loadDates() {
 
   submitBtn.disabled = true;
 
-  hideMessage();
-
-
   const callbackName =
-    "dates_" + Date.now();
+    "testCallback";
 
+  window[callbackName] = function(data) {
 
-  window[callbackName] =
-    function(data) {
+    console.log(data);
 
-      console.log(
-        "ΗΜΕΡΟΜΗΝΙΕΣ:",
-        data
-      );
+    renderDates(data);
 
-
-      try {
-
-        renderDates(data);
-
-      } catch (error) {
-
-        console.error(
-          "Σφάλμα renderDates:",
-          error
-        );
-
-        showMessage(
-          "Σφάλμα εμφάνισης των ημερομηνιών.",
-          "error"
-        );
-
-      }
-
-
-      delete window[callbackName];
-
-    };
-
+  };
 
   const script =
     document.createElement("script");
 
-
   script.src =
     SCRIPT_URL +
-    "?action=getDates" +
-    "&callback=" +
-    callbackName +
-    "&t=" +
-    Date.now();
-
-
-  script.onerror =
-    function() {
-
-      console.error(
-        "JSONP ERROR"
-      );
-
-
-      delete window[callbackName];
-
-
-      dateSelect.innerHTML =
-        '<option value="">Αποτυχία φόρτωσης</option>';
-
-
-      showMessage(
-        "Δεν ήταν δυνατή η φόρτωση των ημερομηνιών.",
-        "error"
-      );
-
-    };
-
+    "?action=getDates&callback=" +
+    callbackName;
 
   document.body.appendChild(script);
 
 }
-
-
-
 /* =====================================================
    RENDER DATES
    ===================================================== */
